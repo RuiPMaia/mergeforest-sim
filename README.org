@@ -1,0 +1,31 @@
+#+TITLE: SpGEMM_sim
+
+This tool provides a cycle-accurate software simulation of the behaviour of my proposed spGEMM hardware accelerator, as well as [[https://dl.acm.org/doi/pdf/10.1145/3445814.3446702][Gamma]]. It uses sparse matrices in the [[https://math.nist.gov/MatrixMarket/formats.html][Matrix Market]] format and a [[https://toml.io/en/][TOML]] configuration file to specify the desired hardware architecture and its parameters. The simulation output includes the total number of cycles, main memory read/write bandwidths, as well as architecture specific stats. To run a simulation use the following command:
+
+#+begin_src shell
+
+  ./spGEMM_sim simulate
+      --matrix <matrix_file> \
+      [--matrix2 <matrix_file2>] \
+      --config <config_file> \
+      [--outdir <out_path>] \
+      [--outname <name>] \
+      [--compute-result]
+
+#+end_src
+
+
+Architecture independent stats about the spGEMM computation can be obtained with the following command:
+
+#+begin_src shell
+
+  ./spGEMM_sim stats
+      --matrix <matrix_file> \
+      [--matrix2 <matrix_file2>] \
+      [--outdir <out_path>] \
+      [--outname <name>]
+
+#+end_src
+
+** TODO parameter description
+** TODO generate command description 
