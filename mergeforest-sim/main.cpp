@@ -145,7 +145,7 @@ int run_gen_app(CLI::App& app) {
   fs::path output_path;
   std::string out_filename;
 
-  app.add_option("-n,--num_nodes", num_nodes, "number of nodes")->required();
+  app.add_option("-n,--num-nodes", num_nodes, "number of nodes")->required();
   app.add_option("-e,--num-edges", num_edges, "number of edges")->required();
   app.add_option("-a", A, "a parameter")->required();
   app.add_option("-b", B, "b parameter")->required();

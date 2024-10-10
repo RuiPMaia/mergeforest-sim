@@ -1,0 +1,17 @@
+arch = "gamma"
+clock_period_ns = 1.0
+
+[PE_manager]
+num_PEs = 32
+PE_radix = 64
+
+[fiber_cache]
+size = 3145728
+num_banks = 48
+assoc = 16
+num_mem_ports = 4
+
+[mem]
+simple = true
+bandwidth = 128
+latency = 80

@@ -1,0 +1,26 @@
+arch = "mergeforest"
+clock_period_ns = 1.0
+
+[merge_tree_manager]
+num_merge_trees = 8
+merge_tree_size = 128 
+merge_tree_merger_width = 4
+num_final_mergers = 1
+final_merger_width = 8
+num_mem_ports = 4
+input_buffer_size = 128
+output_buffer_size = 128
+A_row_ptr_buffer_size = 256
+
+[linked_list_cache]
+size = 3145728
+max_active_rows = 1024
+max_inactive_rows = 32768
+num_banks = 12
+num_mem_ports = 4
+max_fetched_rows = 320
+
+[mem]
+simple = true
+bandwidth = 128
+latency = 80

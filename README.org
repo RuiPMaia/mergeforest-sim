@@ -1,31 +1,68 @@
-#+TITLE: SpGEMM_sim
+#+TITLE: MergeForest Simulator
 
-This tool provides a cycle-accurate software simulation of the behaviour of my proposed spGEMM hardware accelerator, as well as [[https://dl.acm.org/doi/pdf/10.1145/3445814.3446702][Gamma]]. It uses sparse matrices in the [[https://math.nist.gov/MatrixMarket/formats.html][Matrix Market]] format and a [[https://toml.io/en/][TOML]] configuration file to specify the desired hardware architecture and its parameters. The simulation output includes the total number of cycles, main memory read/write bandwidths, as well as architecture specific stats. To run a simulation use the following command:
+This tool provides a cycle-accurate software simulation of the MergeForest spGEMM
+accelerator. It is also capable of simulating the [[https://dl.acm.org/doi/pdf/10.1145/3445814.3446702][GAMMA]] spGEMM accelerator. It uses sparse
+matrices in the [[https://math.nist.gov/MatrixMarket/formats.html][Matrix Market]] format and a [[https://toml.io/en/][TOML]] configuration file to specify the desired
+hardware architecture and its parameters. The simulation output includes the total number
+of cycles, main memory read/write bandwidths, as well as architecture specific statistics.
 
-#+begin_src shell
+* Building and dependencies
 
-  ./spGEMM_sim simulate
-      --matrix <matrix_file> \
-      [--matrix2 <matrix_file2>] \
-      --config <config_file> \
-      [--outdir <out_path>] \
-      [--outname <name>] \
-      [--compute-result]
-
-#+end_src
-
-
-Architecture independent stats about the spGEMM computation can be obtained with the following command:
+The simulator uses the [[https://cmake.org/][CMake]] build system, which provides portability and manages the
+dependencies of the project. Optionally, a number of build options can be configured
+(using ccmake, for example).
 
 #+begin_src shell
+# Generate out of source build
+cmake -S . -B build
 
-  ./spGEMM_sim stats
-      --matrix <matrix_file> \
-      [--matrix2 <matrix_file2>] \
-      [--outdir <out_path>] \
-      [--outname <name>]
+# Alternatively, configure options of the generated build
+ccmake -S . -B build
 
+# Build mergeforest-sim executable in the build directory
+cmake --build build
 #+end_src
 
-** TODO parameter description
-** TODO generate command description 
+* Running
+
+The simulator takes an architecture configuration file and one or two input matrix
+files. Sample configurations for MergeForest and GAMMA and are provided in ~configs/~. If
+only one matrix =A= is provided, the simulator performs =A²= if =A= is square and =A×A^T= if =A= is
+non-square. Optionally, the simulation output path can be set and the result computation
+and checking can be turned off to reduce simulation time.
+
+#+begin_src shell
+# Simulation command line options
+./build/mergeforest-sim simulate --config <config_file> \
+                        --matrix <matrix_file>          \
+                        [--matrix2 <matrix_file2>]      \
+                        [--outdir <out_path>]           \
+                        [--outname <name>]              \
+                        [--no-compute-result]
+
+# Example invocation
+./build/mergeforest-sim simulate --config configs/mergeforest.toml \
+                        --matrix matrices/wiki-Vote.mtx
+#+end_src
+
+Architecture independent statistics about the spGEMM computation can be obtained with the
+following command:
+
+#+begin_src shell
+./build/mergeforest-sim stats --matrix <matrix_file> \
+                        [--matrix2 <matrix_file2>]   \
+                        [--outdir <out_path>]        \
+                        [--outname <name>]
+#+end_src
+
+Additionally, the simulator can generate synthetic matrices using the [[http://www.cs.cmu.edu/~deepay/mywww/papers/siam04.pdf][R-MAT]] generator.
+
+#+begin_src shell
+./build/mergeforest-sim generate --num-nodes <int> \
+                        --num-edges <int>          \
+                        -a <float>                 \
+                        -b <float>                 \
+                        -c <float>                 \
+                        --outdir <out_path>        \
+                        --outname <name>
+#+end_src

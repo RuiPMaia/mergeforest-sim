@@ -27,7 +27,7 @@ Simulator::Simulator(const std::string& config_file,
   , out_path{out_path_}
 {
   const auto arch_str = toml::find<std::string>(parsed_config, "arch");
-  if (arch_str == "my_arch") {
+  if (arch_str == "mergeforest") {
     arch.emplace<MergeForest>(parsed_config, matrix_data, out_path);
   }
   else if (arch_str == "gamma") {
